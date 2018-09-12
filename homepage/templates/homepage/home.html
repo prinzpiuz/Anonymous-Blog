@@ -1,7 +1,14 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<div class="container">
 <form method="post" novalidate>
   {% csrf_token %}
-  <table border="1">
-    {{ form }}
-  </table>
-  <button type="submit">Submit</button>
-</form>
+   <h1>Anonymous Blogger</h1>
+  <div> <label>TITTLE</label>
+      {{ form.post_tittle }}
+  </div><label>CONTENT</label>
+    <div>{{ form.post_content}}</div>
+    <div class="center container">
+          <button type="submit" class="btn btn-primary mt-5">Submit</button>
+
+    </div>
+</form></div>
