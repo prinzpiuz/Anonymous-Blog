@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+db.sqlite3
+*.pyc
+*.log
+anoynymblogging/.idea/*
+.idea/*
+
