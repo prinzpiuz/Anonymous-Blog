@@ -44,14 +44,14 @@ class Edit(View):
 
     def get(self, request, id, skey):
         post = get_object_or_404(Post, id=id, post_key=skey)
-        form = forms.Blog(instance=post)
-        return render(request, 'homepage/edit.html', {'form': form, 'post': post})
+        form = forms.BlogEdit(instance=post)
+        return render(request, 'homepage/home.html', {'form': form, 'post': post})
     def post(self,request,id,skey):
         pos = get_object_or_404(Post, id=id, post_key=skey)
-        form = forms.Blog(request.POST, instance=pos)
+        form = forms.BlogEdit(request.POST, instance=pos)
         if form.is_valid():
             instance = form.save()
             instance.save()
             return redirect('homepage:posts', id=instance.id)
-        return render(request, 'homepage/edit.html', {'form': form, 'post': pos})
+        return render(request, 'homepage/home.html', {'form': form, 'post': pos})
 
