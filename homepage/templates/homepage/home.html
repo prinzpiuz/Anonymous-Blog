@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
+<div class="container">
     <form method="post" novalidate>
-      {% csrf_token %}
-      <div> <label>TITTLE</label>
-          {{ form.post_tittle }}
-      </div><label>CONTENT</label>
+        {% csrf_token %}
+        <div><label>TITTLE</label>
+            {{ form.post_tittle }}
+        </div>
+        <label>CONTENT</label>
         <div>{{ form.post_content}}</div>
         <div class="center container">
             <button type="submit" class="btn btn-primary mt-5">Submit</button>
 
         </div>
-    </form></div>
+    </form>
+</div>
 {% endblock %}
