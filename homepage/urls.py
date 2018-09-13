@@ -5,6 +5,6 @@ app_name='homepage'
 
 urlpatterns = [
     path('',Create.as_view(),name='create'),
-    path('posts/<int:id>/',posts,name='posts'),
+    path('post/<int:id>/',posts,name='posts'),
     path('<id>/edit/<skey>',Edit.as_view(),name='edit')
     ]

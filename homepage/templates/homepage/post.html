@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <div class="container" >
 {% if messages %}
 <ul class="messages">
@@ -9,3 +12,4 @@
 {{post.post_tittle}}
 {{post.post_content}}
 </div>
+{% endblock %}
