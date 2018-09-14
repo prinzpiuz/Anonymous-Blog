@@ -1,9 +1,20 @@
-{{post.post_tittle}}
-{{post.post_content}}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>
+        {% if message.tags %} {{ message }} {% else %} {% endif %}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+   <p>
+       {{post.post_tittle}}
+   </p> <p>
+        {{post.post_content}}
+
+</p>
+</div>
+{% endblock %}
