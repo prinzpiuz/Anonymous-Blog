@@ -11,4 +11,4 @@ class Post(models.Model):
     post_key = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.id
+        return self.post_tittle

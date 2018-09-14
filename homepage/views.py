@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils.crypto import get_random_string
 
 
-def posts(request, id):
+def post(request, id):
     p = get_object_or_404(Post, id=id)
     return render(request, 'homepage/post.html', {'post': p})
 
@@ -32,7 +32,7 @@ class Create(View):
             url = reverse('homepage:edit', kwargs={'id': q.id, 'skey': q.post_key})
             # print(url)
             messages.success(request, mark_safe("<a href='{url}'>{url}</a>".format(url=url)))
-            return redirect('homepage:posts', id=q.id)
+            return redirect('homepage:post', id=q.id)
         return render(request, 'homepage/home.html', {'form': form})
 
 
@@ -49,5 +49,13 @@ class Edit(View):
         if form.is_valid():
             instance = form.save()
             instance.save()
-            return redirect('homepage:posts', id=instance.id)
+            return redirect('homepage:post', id=instance.id)
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
+
+class Posts(View):
+    def get(self, request):
+        q=Post.objects.all()
+        hi = {
+            "posts": q
+        }
+        return render(request, 'homepage/posts.html',hi)
