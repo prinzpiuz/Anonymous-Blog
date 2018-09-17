@@ -4,11 +4,19 @@
 <div class="container">
     <form method="post" novalidate>
         {% csrf_token %}
-        <div><label>TITLE</label>
+        <div class="was-validated"><label>TITLE</label>
             {{ form.post_tittle }}
+            <small id="max-title" class="text-danger">
+                Must more than 10 char
+            </small>
         </div>
-        <label>CONTENT</label>
-        <div>{{ form.post_content}}</div>
+        <div class="was-validated">
+            <label>CONTENT</label>
+            {{ form.post_content}}
+        </div>
+        <small id="max-title" class="text-danger">
+            Must more than 10 char
+        </small>
         <div class="center container">
             <button type="submit" class="btn btn-primary mt-5">Submit</button>
 
