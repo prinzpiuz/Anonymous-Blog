@@ -15,6 +15,14 @@ class Blog(forms.ModelForm):
         model = Post
         fields = ["post_tittle", "post_content"]
 
+    def clean(self):
+        super().clean()
+        title = self.cleaned_data.get('post_tittle')
+        body = self.cleaned_data.get('post_content')
+        if len(title) > len(body):
+            raise forms.ValidationError("body should be longer than title")
+
+
 
 
 
