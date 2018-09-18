@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="mx-auto" style="width: 200px;">
     {% if messages %}
-    <ul class="messages">
+    <ul class="messages list-group list-group-flush">
         {% for message in messages %}
-        <li>
-        {% if message.tags %} {{ message }} {% else %} {% endif %}</li>
+
+        {% if message.tags %} {{ message }} {% else %} {% endif %}
+        <span class="badge badge-primary badge-pill">edit link</span>
         {% endfor %}
     </ul>
     {% endif %}
-   <p>
-       {{post.post_tittle}}
-   </p> <p>
+    <p>
+    <h1>
+        {{post.post_tittle}}
+    </h1>
+    <h5>
         {{post.post_content}}
+    </h5>
 
-</p>
+    </p>
 </div>
 {% endblock %}

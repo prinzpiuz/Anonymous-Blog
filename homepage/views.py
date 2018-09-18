@@ -40,12 +40,12 @@ class Edit(View):
 
     def get(self, request, id, skey):
         post = get_object_or_404(Post, id=id, post_key=skey)
-        form = forms.BlogEdit(instance=post)
+        form = forms.Blog(instance=post)
         return render(request, 'homepage/home.html', {'form': form, 'post': post})
 
     def post(self, request, id, skey):
         pos = get_object_or_404(Post, id=id, post_key=skey)
-        form = forms.BlogEdit(request.POST, instance=pos)
+        form = forms.Blog(request.POST, instance=pos)
         if form.is_valid():
             instance = form.save()
             instance.save()
