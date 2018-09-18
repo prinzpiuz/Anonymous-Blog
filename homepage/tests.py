@@ -21,8 +21,9 @@ class viewTestCases(TestCase):
         self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
     def test_valid_form(self):
-        form = Blog({'post_date': timezone.now(), 'post_key': get_random_string(length=9)}, self.input)
+        form = Blog(self.input)
         self.assertTrue(form.is_valid())
-        submit = form.save()
-        self.assertEqual(submit.post_tittle, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        self.assertEqual(submit.post_content, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+    def test_non_valid_form(self):
+        form = Blog()
+        self.assertFalse(form.is_valid())
