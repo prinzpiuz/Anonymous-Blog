@@ -45,7 +45,7 @@ class viewTestCases(TestCase):
         self.assertFalse(form.is_valid())
 
 
-class Editlinl(TestCase):
+class Editlink(TestCase):
 
 
     def setUp(self):
