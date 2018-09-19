@@ -20,7 +20,6 @@ class viewTestCases(TestCase):
     def test_redirect(self):
         response = self.client.post(reverse('homepage:create'), self.input)
         instance = Post.objects.get()
-
         self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
 
@@ -55,17 +54,21 @@ class Editlinl(TestCase):
                                         post_content='this is for testing purpose fo edit link',
                                         post_key='123456789')
         self.post.save()
-        self.wkey = 'kwoppokdk'
+        self.wrong_key = 'kwoppokdk'
 
     def test_edit_linK(self):
-        response = self.client.get(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.post.post_key}))
+        response = self.client.get(reverse('homepage:edit',
+                                           kwargs={'id': self.post.id, 'skey': self.post.post_key}))
         self.assertContains(response, 'testing purpose', status_code=200)
-        wresponse = self.client.get(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.wkey}))
-        self.assertEqual(wresponse.status_code, 404)
+        wrong_response = self.client.get(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.wrong_key}))
+        self.assertEqual(wrong_response.status_code, 404)
 
     def test_post(self):
-        edit_input={'post_tittle': 'length of tittle',
-                     'post_content': 'less than tittle.now content is graeter than the length of the body'}
-        response = self.client.post(reverse('homepage:edit',kwargs={'id': self.post.id, 'skey': self.post.post_key}),edit_input)
+        edit_input = {'post_tittle': 'length of tittle',
+                      'post_content': 'less than tittle.now content is graeter than the length of the body'}
+        response = self.client.post(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.post.post_key}),
+                                    edit_input)
         self.assertRedirects(response, reverse('homepage:post', kwargs={'id': self.post.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
+        wrong_response = self.client.post(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.wrong_key}))
+        self.assertEqual(wrong_response.status_code, 404)
