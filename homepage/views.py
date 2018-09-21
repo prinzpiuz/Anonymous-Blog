@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 
 def post(request, id):
     p = get_object_or_404(Post, id=id)
-    text=''
+    text = ''
     q = p.post_content
     soup = BeautifulSoup(q)
     s = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
@@ -60,9 +60,10 @@ class Edit(View):
             return redirect('homepage:post', id=instance.id)
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
 
+
 class Posts(View):
     def get(self, request):
-        q=Post.objects.all()
+        q = Post.objects.all()
         hi = {
             "posts": q
         }
