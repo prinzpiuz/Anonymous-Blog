@@ -24,7 +24,7 @@ def post(request, id):
         i = int(str(item)[2])
         text += i * '*' + item.text + '\n'
 
-    return render(request, 'homepage/post.html', {'post': p,'text': text})
+    return render(request, 'homepage/post.html', {'post': p,'table_of_contents': text})
 
 
 class Create(View):
