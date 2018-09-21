@@ -10,11 +10,21 @@ from django.contrib import messages
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.crypto import get_random_string
+from bs4 import BeautifulSoup
 
 
 def post(request, id):
     p = get_object_or_404(Post, id=id)
-    return render(request, 'homepage/post.html', {'post': p})
+    text=''
+    q = p.post_content
+    soup = BeautifulSoup(q)
+    s = soup.find_all('h1') + soup.find_all('h2') + soup.find_all('h3') + soup.find_all('h4') + soup.find_all(
+        'h5') + soup.find_all('h6')
+    for item in s:
+        i = int(str(item)[2])
+        text += i * '*' + item.text + '\n'
+
+    return render(request, 'homepage/post.html', {'post': p,'text': text})
 
 
 class Create(View):

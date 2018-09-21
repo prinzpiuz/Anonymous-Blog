@@ -4,14 +4,17 @@
 <ul class="list-group">
     {% for post in posts %}
 
+
     <li class="list-group-item ">
+        {{post.id}}<br/>
+        {{post.post_date}}<br/>
+    {{ post.post_tittle}}<br/>
 
-    {{ post.post_tittle}}
-    </li>
-    <p>
-           {{ post.post_content}}
-    </p>
 
+
+       <div class="container-fluid">
+    <p>{{ post.post_content}}</p> </div>
+</li>
 
 {% endfor %}
 
