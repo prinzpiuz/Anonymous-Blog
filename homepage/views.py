@@ -21,7 +21,7 @@ def post(request, id):
     s = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
     for item in s:
         i = int(str(item)[2])
-        text += i * '.' + item.text + '\n'
+        text += i * '<ul>' + '<li>' + item.text + '</li>'  + '</ul>'* i + '\n'
 
     return render(request, 'homepage/post.html', {'post': p, 'table_of_contents': text})
 
