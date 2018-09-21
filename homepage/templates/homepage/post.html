@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="mx-auto" style="width: 200px;">
+<div class="col-lg-5 mx-auto mt-3">
     {% if messages %}
     <ul class="messages list-group list-group-flush">
         {% for message in messages %}
@@ -11,14 +11,15 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <p>
-    <h1>
-        {{post.post_tittle}}
-    </h1>
-    <h5>
-        {{post.post_content|safe|linebreaksbr}}
-    </h5>
 
-    </p>
+    <h1>{{post.post_tittle}}</h1>
+
+    <br/>
+
+
+    {{table_of_contents|safe|linebreaksbr}}
+    {{post.post_content|safe|linebreaksbr}}
+
+
 </div>
 {% endblock %}
