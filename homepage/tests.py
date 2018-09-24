@@ -83,6 +83,13 @@ class Rendering(TestCase):
         self.input = {'post_tittle': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
                       'post_content': 'this tag will not render<a>\n\nthis is for test'}
 
+        self.input1 = {'post_tittle': 'aaaaaaaaaaa', 'post_content': '<h1>will</h1><h2>hi</h2>'}
+
+
     def test_multiple_para_rendering_and_NO_unsafe_tags(self):
         response = self.client.post(reverse('homepage:create'), self.input, follow=True)
         self.assertContains(response, '<p>this tag will not render&lt;a&gt;</p>', status_code=200)
+
+    def test_TOC(self):
+        response = self.client.post(reverse('homepage:create'), self.input1, follow=True)
+        self.assertContains(response, '<ul><li>will</li></ul><ul><ul><li>hi</li></ul></ul>', status_code=200)
