@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login
 
 from . import forms
 from .models import Post
@@ -21,7 +22,7 @@ def post(request, id):
     s = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
     for item in s:
         i = int(str(item)[2])
-        text += i*'<ul>' + '<li>' + item.text + '</li>'  + '</ul>'*i
+        text += i*'<ul>' + '<li>' + item.text + '</li>'  + i*'</ul>'
 
     return render(request, 'homepage/post.html', {'post': p, 'table_of_contents': text})
 
@@ -68,3 +69,32 @@ class Posts(View):
             "posts": q
         }
         return render(request, 'homepage/posts.html', hi)
+
+class Register(View):
+    def get(self,request):
+        form = UserCreationForm()
+        return render(request, 'homepage/register.html', {'form': form})
+
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user=form.save()
+            login(request, user)
+            return redirect('homepage:login')
+        return render(request, 'homepage/register.html', {'form': form})
+
+
+class LoginUser(View):
+    def get(self,request):
+        form = AuthenticationForm()
+        return render(request,'homepage/login.html',{'form':form})
+
+    def post(self,request):
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request,user)
+            return redirect('homepage:posts')
+        return render(request,'homepage/login.html',{'form':form})
+
+
