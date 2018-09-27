@@ -2,11 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views import View
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login
-
+from django.contrib.auth import login, logout
 from . import forms
 from .models import Post
-
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -38,6 +36,8 @@ class Create(View):
             q = form.save(commit=False)
             q.post_date = timezone.now()
             q.post_key = get_random_string(length=9)
+            if request.user.is_authenticated:
+                q.post_author = request.user
             q.save()
             url = reverse('homepage:edit', kwargs={'id': q.id, 'skey': q.post_key})
             messages.success(request, mark_safe("<a href='{url}'>{url}</a>".format(url=url)))
@@ -60,6 +60,16 @@ class Edit(View):
             instance.save()
             return redirect('homepage:post', id=instance.id)
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
+
+class Mine(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            w = Post.objects.filter(post_author=user)
+            data = {
+            "posts": w
+            }
+            return render(request, 'homepage/mine.html', data)
 
 
 class Posts(View):
@@ -90,11 +100,15 @@ class LoginUser(View):
         return render(request,'homepage/login.html',{'form':form})
 
     def post(self,request):
-        form = AuthenticationForm(request.POST)
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request,user)
-            return redirect('homepage:posts')
+            login(request, user)
+            return redirect('homepage:create')
         return render(request,'homepage/login.html',{'form':form})
 
 
+class LogOut(View):
+    def get(self, request):
+        logout(request)
+        return redirect('homepage:login')

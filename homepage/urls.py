@@ -1,5 +1,5 @@
 from django.urls import path
-from homepage.views import Create, post, Edit, Posts, Register, LoginUser
+from homepage.views import Create, post, Edit, Posts, Register, LoginUser, LogOut, Mine
 
 
 app_name = 'homepage'
@@ -11,4 +11,6 @@ urlpatterns = [
     path('post/<id>/', post, name='post'),
     path('<id>/edit/<skey>', Edit.as_view(), name='edit'),
     path('posts/', Posts.as_view(), name='posts'),
+    path('logout/',LogOut.as_view(), name='logout'),
+    path('mine/',Mine.as_view(), name='mine')
 ]

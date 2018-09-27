@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="post" >
+<div class="container">
+<form method="post" class="col-lg-3 m-auto pt-5">
     {% csrf_token %}
-
-    {{form}}
-<button type="submit">register</button>
+          username<br/>
+    {{form.username}}<br/>
+    password<br/>
+    {{form.password1}}<br/>
+    confirm password<br/>
+    {{form.password2}}<br/>
+<button type="submit" class="btn btn-primary mt-2 float-right">register</button>
   </form>
+
+</div>
     {% endblock %}
