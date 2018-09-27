@@ -15,13 +15,16 @@ class viewTestCases(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
         self.input = {'post_tittle': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-                      'post_content': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}
+                      'post_content': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<script>alert("Hello");</script>\n\n this is for test'}
 
     def test_redirect(self):
         response = self.client.post(reverse('homepage:create'), self.input)
         instance = Post.objects.get()
         self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
+
+
+
 
     def test_valid_form(self):
         form = Blog(self.input)
@@ -45,13 +48,14 @@ class viewTestCases(TestCase):
         self.assertFalse(form.is_valid())
 
 
+
 class Editlink(TestCase):
 
 
     def setUp(self):
         self.post = Post.objects.create(post_tittle='testing purpose',
                                         post_date=timezone.now(),
-                                        post_content='this is for testing purpose fo edit link',
+                                        post_content='this is for testing \n\n purpose fo edit link',
                                         post_key='123456789')
         self.post.save()
         self.wrong_key = 'kwoppokdk'
@@ -72,3 +76,20 @@ class Editlink(TestCase):
                              target_status_code=200, fetch_redirect_response=True)
         wrong_response = self.client.post(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.wrong_key}))
         self.assertEqual(wrong_response.status_code, 404)
+
+class Rendering(TestCase):
+
+    def setUp(self):
+        self.input = {'post_tittle': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                      'post_content': 'this tag will not render<a></a>\n\nthis is for test'}
+
+        self.input1 = {'post_tittle': 'aaaaaaaaaaa', 'post_content': '<h1>will</h1><h2>hi</h2>'}
+
+
+    def test_multiple_para_rendering_and_NO_unsafe_tags(self):
+        response = self.client.post(reverse('homepage:create'), self.input, follow=True)
+        self.assertContains(response, '<p>this tag will not render&lt;a&gt;&lt;/a&gt;</p>\n\n<p>this is for test</p>', status_code=200)
+
+    def test_TOC(self):
+        response = self.client.post(reverse('homepage:create'), self.input1, follow=True)
+        self.assertContains(response, '<ul><li>will</li></ul><ul><ul><li>hi</li></ul></ul>', status_code=200)
