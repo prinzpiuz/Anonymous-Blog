@@ -7,7 +7,7 @@
         <div class="was-validated"><label>TITLE</label>
             {{ form.post_tittle }}
             <small id="max-title" class="text-danger">
-                Must more than 10 char
+                {{ form.post_tittle.errors }}
             </small>
         </div>
         <div class="was-validated">
@@ -15,12 +15,12 @@
             {{ form.post_content}}
         </div>
         <small id="max-title" class="text-danger">
-            Must more than 10 char
-        </small>
-        <div class="center container">
-            <button type="submit" class="btn btn-primary mt-5">Submit</button>
+            {{ form.post_content.errors }}
 
-        </div>
+        </small>
+        <input type="submit" value="submit" class="btn btn-primary mt-5">
+
+
     </form>
 </div>
 {% endblock %}
