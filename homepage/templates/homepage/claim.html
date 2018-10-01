@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="was-validated"><label>TITLE</label>
+            {{ form.post_tittle }}
+            <small id="max-title" class="text-danger">
+                {{ form.post_tittle.errors }}
+            </small>
+        </div>
+        <div class="was-validated">
+            <label>CONTENT</label>
+            {{ form.post_content}}
+        </div>
+        <small id="max-title" class="text-danger">
+            {{ form.post_content.errors }}
+
+        </small>
+        <input type="submit" value="submit" class="btn btn-primary mt-5">
+
+
+    </form>
+    <div class="float-right">
+        <a href="{{url}}">it's Mine</a>
+
+    </div>
+</div>
+{% endblock %}

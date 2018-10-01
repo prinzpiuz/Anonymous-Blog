@@ -1,5 +1,5 @@
 from django.urls import path
-from homepage.views import Create, post, Edit, Posts, Register, LoginUser, LogOut, Mine, LogedInUserEdit
+from homepage.views import Create, post, Edit, Posts, Register, LoginUser, LogOut, Mine, LogedInUserEdit, Claim
 
 app_name = 'homepage'
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('<id>/edit/<skey>', Edit.as_view(), name='edit'),
     path('posts/', Posts.as_view(), name='posts'),
     path('logout/', LogOut.as_view(), name='logout'),
-    path('mine/', Mine.as_view(), name='mine')
+    path('mine/', Mine.as_view(), name='mine'),
+    path('<id>/claim/', Claim.as_view(), name='claim')
 
 ]

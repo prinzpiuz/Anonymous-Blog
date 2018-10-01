@@ -72,7 +72,11 @@ class Edit(View):
     def get(self, request, id, skey):
         post = get_object_or_404(Post, id=id, post_key=skey)
         form = forms.Blog(instance=post)
-        return render(request, 'homepage/home.html', {'form': form, 'post': post})
+        if request.user.is_authenticated and post.post_author == None:
+            url = reverse('homepage:claim', kwargs={'id': post.id})
+            return render(request, 'homepage/claim.html', {'form': form, 'post': post, 'url': url})
+        else:
+            return render(request, 'homepage/home.html', {'form': form, 'post': post})
 
     def post(self, request, id, skey):
         pos = get_object_or_404(Post, id=id, post_key=skey)
@@ -82,6 +86,15 @@ class Edit(View):
             instance.save()
             return redirect('homepage:post', id=instance.id)
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
+
+
+class Claim(View):
+    def get(self, request, id):
+        user = request.user
+        pos = Post.objects.get(id=id)
+        pos.post_author = user
+        pos.save()
+        return redirect('homepage:post', id=id)
 
 
 class Mine(View):
