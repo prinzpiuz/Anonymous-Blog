@@ -2,6 +2,13 @@
 
 {% block content %}
 <div class="col-lg-5 mx-auto mt-3">
+    {% if user.is_authenticated %}
+    <ul class="messages list-group list-group-flush">
+        <a href='{{url}}'>{{url}}</a>
+        <span class="badge badge-primary badge-pill">edit link</span>
+    </ul>
+    {% else %}
+
     {% if messages %}
     <ul class="messages list-group list-group-flush">
         {% for message in messages %}
@@ -11,6 +18,8 @@
         {% endfor %}
     </ul>
     {% endif %}
+    {% endif %}
+
 
     <h1>{{post.post_tittle}}</h1>
 
