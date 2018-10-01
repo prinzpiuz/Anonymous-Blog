@@ -106,7 +106,6 @@ class Posts(View):
         return render(request, 'homepage/posts.html', hi)
 
 
-
 class Register(View):
     def get(self, request):
         form = UserCreationForm()
