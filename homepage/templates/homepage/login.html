@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="container">
-<form  action="{% url 'homepage:login' %}" method="post" class="col-lg-3 m-auto pt-5">
-    {% csrf_token %}
-username<br/>
-    {{form.username}}<br/>
-password<br/>
-    {{form.password}}<br/>
- <input type="submit" class="btn btn-primary mt-1" value="login">
-</form>
+    <form action="{% url 'homepage:login' %}" method="post" class="col-lg-3 m-auto pt-5">
+        {% csrf_token %}
+        username<br/>
+        {{form.username}}<br/>
+        password<br/>
+        {{form.password}}<br/>
+        <input type="submit" class="btn btn-primary mt-1" value="login">
+    </form>
 </div>
 {% endblock %}

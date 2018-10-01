@@ -7,15 +7,14 @@
 
     <li class="list-group-item ">
         {{post.post_date}}<br/>
-    {{ post.post_tittle}}<br/>
+        {{ post.post_tittle}}<br/>
 
 
+        <div class="container-fluid">
+            <p>{{ post.post_content}}</p></div>
+    </li>
 
-       <div class="container-fluid">
-    <p>{{ post.post_content}}</p> </div>
-</li>
-
-{% endfor %}
+    {% endfor %}
 
 </ul>
 {% endblock %}

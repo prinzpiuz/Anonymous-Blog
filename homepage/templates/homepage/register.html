@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="container">
-<form method="post" class="col-lg-3 m-auto pt-5">
-    {% csrf_token %}
-          username<br/>
-    {{form.username}}<br/>
-    password<br/>
-    {{form.password1}}<br/>
-    confirm password<br/>
-    {{form.password2}}<br/>
-<button type="submit" class="btn btn-primary mt-2 float-right">register</button>
-  </form>
+    <form method="post" class="col-lg-3 m-auto pt-5">
+        {% csrf_token %}
+        username<br/>
+        {{form.username}}<br/>
+        password<br/>
+        {{form.password1}}<br/>
+        confirm password<br/>
+        {{form.password2}}<br/>
+        <button type="submit" class="btn btn-primary mt-2 float-right">register</button>
+    </form>
 
 </div>
-    {% endblock %}
+{% endblock %}
