@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
-
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
 from . import forms
 from .models import Post
-
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -43,10 +42,11 @@ class Create(View):
                 q.post_author = request.user
                 q.save()
                 return redirect('homepage:post', id=q.id)
-            q.save()
-            url = reverse('homepage:edit', kwargs={'id': q.id, 'skey': q.post_key})
-            messages.success(request, mark_safe("<a href='{url}'>{url}</a>".format(url=url)))
-            return redirect('homepage:post', id=q.id)
+            else:
+                q.save()
+                url = reverse('homepage:edit', kwargs={'id': q.id, 'skey': q.post_key})
+                messages.success(request, mark_safe("<a href='{url}'>{url}</a>".format(url=url)))
+                return redirect('homepage:post', id=q.id)
         return render(request, 'homepage/home.html', {'form': form})
 
 

@@ -8,11 +8,22 @@
 </head>
 <body>
 <nav class="navbar sticky-top border-bottom py-0 navbar-light bg-primary">
-    <a class="navbar-brand ml-4 text-info text-light" href="/">Anonymous-Blogging</a>
+    <a class="navbar-brand ml-4 text-light" href="{% url 'homepage:create' %}">Anonymous-Blogging</a>
 
     <div class="float-right">
-        <a class="nav-link text-light float-right" href="/">Home</a>
+        {% if user.is_authenticated %}
+        <a class="nav-link text-light float-right" href="{% url 'homepage:logout' %}">Logout</a>
+        <a class="nav-link text-light float-right" href="#">{{ user }}</a>
+        <a class="nav-link text-light float-right" href="{% url 'homepage:create' %}">Home</a>
         <a class="nav-link text-light float-right" href="/posts/">Posts</a>
+        <a class="nav-link text-light float-right" href="{% url 'homepage:mine' %}">Mine</a>
+        {% else %}
+        <a class="nav-link text-light float-right" href="{% url 'homepage:login' %}">Login</a>
+        <a class="nav-link text-light float-right" href="{% url 'homepage:register' %}">SignUp</a>
+        <a class="nav-link text-light float-right" href="{% url 'homepage:create' %}">Home</a>
+        <a class="nav-link text-light float-right" href="/posts/">Posts</a>
+        {% endif %}
+
     </div>
 </nav>
 {% block content %}
