@@ -10,7 +10,6 @@ from django.utils import timezone
 # Create your tests here.
 class viewTestCases(TestCase):
 
-
     @classmethod
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
@@ -22,9 +21,6 @@ class viewTestCases(TestCase):
         instance = Post.objects.get()
         self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
-
-
-
 
     def test_valid_form(self):
         form = Blog(self.input)
@@ -48,9 +44,7 @@ class viewTestCases(TestCase):
         self.assertFalse(form.is_valid())
 
 
-
 class Editlink(TestCase):
-
 
     def setUp(self):
         self.post = Post.objects.create(post_tittle='testing purpose',
@@ -77,6 +71,7 @@ class Editlink(TestCase):
         wrong_response = self.client.post(reverse('homepage:edit', kwargs={'id': self.post.id, 'skey': self.wrong_key}))
         self.assertEqual(wrong_response.status_code, 404)
 
+
 class Rendering(TestCase):
 
     def setUp(self):
@@ -85,10 +80,10 @@ class Rendering(TestCase):
 
         self.input1 = {'post_tittle': 'aaaaaaaaaaa', 'post_content': '<h1>will</h1><h2>hi</h2>'}
 
-
     def test_multiple_para_rendering_and_NO_unsafe_tags(self):
         response = self.client.post(reverse('homepage:create'), self.input, follow=True)
-        self.assertContains(response, '<p>this tag will not render&lt;a&gt;&lt;/a&gt;</p>\n\n<p>this is for test</p>', status_code=200)
+        self.assertContains(response, '<p>this tag will not render&lt;a&gt;&lt;/a&gt;</p>\n\n<p>this is for test</p>',
+                            status_code=200)
 
     def test_TOC(self):
         response = self.client.post(reverse('homepage:create'), self.input1, follow=True)
