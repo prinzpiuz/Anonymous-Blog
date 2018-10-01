@@ -23,6 +23,9 @@ def post(request, id):
         i = int(str(item)[2])
         text += i * '<ul>' + '<li>' + item.text + '</li>' + '</ul>' * i
 
+
+
+
     return render(request, 'homepage/post.html', {'post': p, 'table_of_contents': text, 'url': url})
 
 
