@@ -89,7 +89,6 @@ class Edit(View):
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
 
 
-
 def claim(request, id):
     user = request.user
     pos = Post.objects.get(id=id)
