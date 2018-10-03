@@ -88,13 +88,12 @@ class Edit(View):
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
 
 
-class Claim(View):
-    def get(self, request, id):
-        user = request.user
-        pos = Post.objects.get(id=id)
-        pos.post_author = user
-        pos.save()
-        return redirect('homepage:post', id=id)
+def claim(request, id):
+    user = request.user
+    pos = Post.objects.get(id=id)
+    pos.post_author = user
+    pos.save()
+    return redirect('homepage:post', id=id)
 
 
 class Mine(View):

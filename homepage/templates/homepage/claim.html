@@ -1,30 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class=" col-lg-2 m-auto pt-5">
+    <button class="btn btn-primary" onclick="YesOrNo()" type="button">Claim This Post</button>
+    <script>
+function YesOrNo() {
+    var txt;
+    if (confirm("do you want to claim the post as yours ?")) {
+    window.location.href="{{url}}"
+    }
+}
+
+
+    </script>
+</div>
 <div class="container">
     <form method="post" novalidate>
         {% csrf_token %}
         <div class="was-validated"><label>TITLE</label>
             {{ form.post_tittle }}
-            <small id="max-title" class="text-danger">
-                {{ form.post_tittle.errors }}
-            </small>
+
         </div>
         <div class="was-validated">
             <label>CONTENT</label>
             {{ form.post_content}}
         </div>
-        <small id="max-title" class="text-danger">
-            {{ form.post_content.errors }}
 
-        </small>
         <input type="submit" value="submit" class="btn btn-primary mt-5">
 
 
     </form>
-    <div class="float-right">
-        <a href="{{url}}">it's Mine</a>
 
-    </div>
 </div>
 {% endblock %}
