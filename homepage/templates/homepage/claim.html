@@ -3,20 +3,22 @@
 {% block content %}
 
 <div class=" col-lg-2 m-auto pt-5">
-    <button class="btn btn-primary" onclick="YesOrNo()" type="button">Claim This Post</button>
-    <script>
+    <form action="{{url}}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="claim the post" class="btn btn-primary" onclick="return YesOrNo()">
+        <script>
 function YesOrNo() {
-    var txt;
     if (confirm("do you want to claim the post as yours ?")) {
-    window.location.href="{{url}}"
+    return true;
     }
 }
 
-
-    </script>
+        </script>
+    </form>
 </div>
 <div class="container">
     <form method="post" novalidate>
+
         {% csrf_token %}
         <div class="was-validated"><label>TITLE</label>
             {{ form.post_tittle }}
@@ -27,9 +29,8 @@ function YesOrNo() {
             {{ form.post_content}}
         </div>
 
+
         <input type="submit" value="submit" class="btn btn-primary mt-5">
-
-
     </form>
 
 </div>
