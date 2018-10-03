@@ -1,5 +1,10 @@
 from django.urls import path
+
 from homepage.views import Create, post, Edit, Posts, Register, LoginUser, LogOut, Mine, LogedInUserEdit, Claim
+
+
+
+
 
 app_name = 'homepage'
 

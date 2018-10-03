@@ -37,6 +37,7 @@ class Create(View):
             q = form.save(commit=False)
             q.post_date = timezone.now()
             q.post_key = get_random_string(length=9)
+
             if request.user.is_authenticated:
                 q.post_author = request.user
                 q.save()
@@ -88,6 +89,7 @@ class Edit(View):
         return render(request, 'homepage/home.html', {'form': form, 'post': pos})
 
 
+
 class Claim(View):
     def get(self, request, id):
         user = request.user
@@ -95,6 +97,7 @@ class Claim(View):
         pos.post_author = user
         pos.save()
         return redirect('homepage:post', id=id)
+
 
 
 class Mine(View):
