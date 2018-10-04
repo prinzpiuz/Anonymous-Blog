@@ -9,12 +9,9 @@
         <script>
 function YesOrNo(event) {
         val = confirm("do you want to claim the post as yours ?");
-        if (val === true) {
-            return true;
+        if (val === false) {
+            event.preventDefault();
              }
-         else {
-        event.preventDefault();
-               }
          }
         </script>
     </form>
