@@ -5,14 +5,17 @@
 <div class=" col-lg-2 m-auto pt-5">
     <form action="{{url}}" method="post">
         {% csrf_token %}
-        <input type="submit" value="claim the post" class="btn btn-primary" onclick="return YesOrNo()">
+        <input type="submit" value="claim the post" class="btn btn-primary" onclick="return YesOrNo(event)">
         <script>
-function YesOrNo() {
-    if (confirm("do you want to claim the post as yours ?")) {
-    return true;
-    }
-}
-
+function YesOrNo(event) {
+        val = confirm("do you want to claim the post as yours ?");
+        if (val === true) {
+            return true;
+             }
+         else {
+        event.preventDefault();
+               }
+         }
         </script>
     </form>
 </div>
