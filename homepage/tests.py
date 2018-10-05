@@ -1,11 +1,11 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Post
+from .models import Post, User
 from . import forms
 from .forms import Blog
 from django.utils.crypto import get_random_string
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 
 # Create your tests here.
 class viewTestCases(TestCase):
@@ -88,3 +88,62 @@ class Rendering(TestCase):
     def test_TOC(self):
         response = self.client.post(reverse('homepage:create'), self.input1, follow=True)
         self.assertContains(response, '<ul><li>will</li></ul><ul><ul><li>hi</li></ul></ul>', status_code=200)
+
+
+class LogInTest(TestCase):
+    def setUp(self):
+        self.input = {
+            'username': 'testuser',
+            'password': 'secret'}
+        self.duplicate = {
+            'username': 'testuser',
+            'password1': 'secret',
+            'password2': 'secret'}
+        self.reg = {
+            'username': 'testuser1',
+            'password1': 'secret.811',
+            'password2': 'secret.811'}
+        self.input2 = {
+            'username': 'testuser3',
+            'password': 'secret'}
+        self.post = {'post_tittle': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                      'post_content': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<script>alert("Hello");</script>\n\n this is for test'}
+        User.objects.create_user(**self.input)
+
+    def test_login(self):
+        response = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        self.assertTrue(response.context['user'].is_active)
+
+    def test_with_wrong_credentials(self):
+        response = self.client.post(reverse('homepage:login'), self.input2, follow=True)
+        self.assertFalse(response.context['user'].is_active)
+
+    def test_logout(self):
+        self.client.post(reverse('homepage:login'), self.input, follow=True)
+        responce = self.client.get(reverse('homepage:logout'))
+        self.assertRedirects(responce, reverse('homepage:login'), status_code=302,
+                             target_status_code=200, fetch_redirect_response=True)
+
+    def test_register(self):
+        responce = self.client.post(reverse('homepage:register'), self.reg, follow=True)
+        self.assertEqual(User.objects.count(), 2)
+        self.assertRedirects(responce, reverse('homepage:login'), status_code=302,
+                             target_status_code=200, fetch_redirect_response=True)
+        self.assertTrue(responce.context['user'].is_active)
+
+    # # this will test for uniqness of username if tried to login with same username again page dont redirect
+    def test_for_unique_username(self):
+        responce = self.client.post(reverse('homepage:register'),self.duplicate, follow=True)
+
+        self.assertContains(responce,'A user with that username already exists.',status_code=200)
+
+
+    def test_post_creation_of_logged_user(self):
+        responce = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response = self.client.post(reverse('homepage:create'), self.post)
+        instance = Post.objects.get()
+        self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
+                             target_status_code=200, fetch_redirect_response=True)
+        self.assertTrue(responce.context['user'].is_active)
+
+
