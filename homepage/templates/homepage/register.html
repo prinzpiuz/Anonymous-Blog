@@ -6,12 +6,22 @@
         {% csrf_token %}
         username<br/>
         {{form.username}}<br/>
+        <small id="max-title" class="text-danger">
+                {{ form.username.errors }}
+            </small>
         password<br/>
         {{form.password1}}<br/>
+        <small id="max-title" class="text-danger">
+                {{ form.password1.errors }}
+            </small>
         confirm password<br/>
         {{form.password2}}<br/>
+        <small id="max-title" class="text-danger">
+                {{ form.password2.errors }}
+            </small>
         <button type="submit" class="btn btn-primary mt-2 float-right">register</button>
     </form>
 
 </div>
 {% endblock %}
+

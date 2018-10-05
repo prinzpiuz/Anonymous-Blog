@@ -7,7 +7,6 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-
 # Create your tests here.
 class viewTestCases(TestCase):
 
@@ -96,6 +95,10 @@ class LogInTest(TestCase):
         self.input = {
             'username': 'testuser',
             'password': 'secret'}
+        self.duplicate = {
+            'username': 'testuser',
+            'password1': 'secret',
+            'password2': 'secret'}
         self.reg = {
             'username': 'testuser1',
             'password1': 'secret.811',
@@ -103,6 +106,8 @@ class LogInTest(TestCase):
         self.input2 = {
             'username': 'testuser3',
             'password': 'secret'}
+        self.post = {'post_tittle': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                      'post_content': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<script>alert("Hello");</script>\n\n this is for test'}
         User.objects.create_user(**self.input)
 
     def test_login(self):
@@ -121,10 +126,24 @@ class LogInTest(TestCase):
 
     def test_register(self):
         responce = self.client.post(reverse('homepage:register'), self.reg, follow=True)
+        self.assertEqual(User.objects.count(), 2)
         self.assertRedirects(responce, reverse('homepage:login'), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
+        self.assertTrue(responce.context['user'].is_active)
 
-    # this will test for uniqness of username if tried to login with same username again page dont redirect
+    # # this will test for uniqness of username if tried to login with same username again page dont redirect
     def test_for_unique_username(self):
-        responce = self.client.post(reverse('homepage:register'), self.reg, follow=True)
-        self.assertEqual(responce.status_code, 200)
+        responce = self.client.post(reverse('homepage:register'),self.duplicate, follow=True)
+
+        self.assertContains(responce,'A user with that username already exists.',status_code=200)
+
+
+    def test_post_creation_of_logged_user(self):
+        responce = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response = self.client.post(reverse('homepage:create'), self.post)
+        instance = Post.objects.get()
+        self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
+                             target_status_code=200, fetch_redirect_response=True)
+        self.assertTrue(responce.context['user'].is_active)
+
+
