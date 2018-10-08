@@ -120,58 +120,59 @@ class LogInTest(TestCase):
 
     def test_logout(self):
         self.client.post(reverse('homepage:login'), self.input, follow=True)
-        responce = self.client.get(reverse('homepage:logout'))
-        self.assertRedirects(responce, reverse('homepage:login'), status_code=302,
+        response = self.client.get(reverse('homepage:logout'))
+        self.assertRedirects(response, reverse('homepage:login'), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
 
     def test_register(self):
-        responce = self.client.post(reverse('homepage:register'), self.reg, follow=True)
+        response = self.client.post(reverse('homepage:register'), self.reg, follow=True)
         self.assertEqual(User.objects.count(), 2)
-        self.assertRedirects(responce, reverse('homepage:login'), status_code=302,
+        self.assertRedirects(response, reverse('homepage:login'), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
-        self.assertTrue(responce.context['user'].is_active)
+        self.assertTrue(response.context['user'].is_active)
 
     # # this will test for uniqness of username if tried to login with same username again page dont redirect
     def test_for_unique_username(self):
-        responce = self.client.post(reverse('homepage:register'), self.duplicate, follow=True)
+        response = self.client.post(reverse('homepage:register'), self.duplicate, follow=True)
 
-        self.assertContains(responce, 'A user with that username already exists.', status_code=200)
+        self.assertContains(response, 'A user with that username already exists.', status_code=200)
 
     def test_post_creation_of_logged_user(self):
-        responce = self.client.post(reverse('homepage:login'), self.input, follow=True)
-        response = self.client.post(reverse('homepage:create'), self.post)
-        instance = Post.objects.get(id=1)
-        self.assertRedirects(response, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
+        response = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response1 = self.client.post(reverse('homepage:create'), self.post)
+        instance = Post.objects.get(id=response1.url.split('/')[2])
+        self.assertRedirects(response1, reverse('homepage:post', kwargs={'id': instance.id}), status_code=302,
                              target_status_code=200, fetch_redirect_response=True)
         self.assertEqual(instance.post_author.username, self.input['username'])
-        self.assertTrue(responce.context['user'].is_active)
+        self.assertTrue(response.context['user'].is_active)
 
     def test_mine(self):
-        responce_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
         self.client.post(reverse('homepage:create'), self.post)
-        responce = self.client.get(reverse('homepage:mine'))
-        self.assertContains(responce, self.post['post_tittle'], status_code=200)
-        self.assertTrue(responce_login.context['user'].is_active)
+        response = self.client.get(reverse('homepage:mine'))
+        self.assertContains(response, self.post['post_tittle'], status_code=200)
+        self.assertTrue(response_login.context['user'].is_active)
 
     def test_logged_user_edit_link(self):
-        responce_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
-        self.client.post(reverse('homepage:create'), self.post)
-        instance = Post.objects.get(id=1)
+        response_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response1 = self.client.post(reverse('homepage:create'), self.post)
+        instance = Post.objects.get(id=response1.url.split('/')[2])
         response = self.client.get(reverse('homepage:loginedit',
                                            kwargs={'id': instance.id}))
         self.assertContains(response, self.post['post_tittle'], status_code=200)
-        self.assertTrue(responce_login.context['user'].is_active)
+        self.assertTrue(response_login.context['user'].is_active)
         wrong_response = self.client.get(reverse('homepage:loginedit', kwargs={'id': 10}))
         self.assertEqual(wrong_response.status_code, 404)
 
     def test_claim(self):
-        self.client.post(reverse('homepage:create'), self.post)
-        instance = Post.objects.get(id=1)
+        response1 = self.client.post(reverse('homepage:create'), self.post)
+        instance = Post.objects.get(id=response1.url.split('/')[2])
         id = instance.id
         skey = instance.post_key
-        responce_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
+        response_login = self.client.post(reverse('homepage:login'), self.input, follow=True)
         self.client.post(reverse('homepage:edit', kwargs={'id': id, 'skey': skey}))
         self.client.post(reverse('homepage:claim', kwargs={'id': id}))
-        responce = self.client.get(reverse('homepage:mine'))
-        self.assertContains(responce, self.post['post_tittle'], status_code=200)
-        self.assertTrue(responce_login.context['user'].is_active)
+        response = self.client.get(reverse('homepage:mine'))
+        self.assertContains(response, self.post['post_tittle'], status_code=200)
+        self.assertTrue(response_login.context['user'].is_active)
+    
