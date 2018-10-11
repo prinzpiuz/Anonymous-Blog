@@ -108,6 +108,7 @@ class Mine(View):
             }
             return render(request, 'homepage/mine.html', data)
 
+        return redirect('homepage:login')
 
 class Posts(View):
     def get(self, request):
