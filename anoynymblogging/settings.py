@@ -11,7 +11,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-
+import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, True)
+)
+# reading .env file
+environ.Env.read_env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,10 +25,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ja)=*02n$_gzu2%qx4-lv^da(u6epd=e-zs4p$_3j!mbin0tvh'
+SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in product
+
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -73,10 +80,14 @@ WSGI_APPLICATION = 'anoynymblogging.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': env('DATABASE_NAME'),
+       'USER': env('DATABASE_USERNAME'),
+       'PASSWORD': env('DATABASE_PASSWORD'),
+       'HOST': env('DATABASE_HOST'),
+       'PORT': '',
+   }
 }
 
 # Password validation
